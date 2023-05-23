@@ -1,14 +1,12 @@
 package com.pinheng.youcai;
 
 import com.pinheng.youcai.model.GrantAccessToken;
-import lombok.Setter;
 
 import java.io.IOException;
 
 /**
  * <a href="https://b2b.you.163.com/distribution/openapi#/home">API说明</a>
  */
-@Setter
 public class OpenClient {
 
     /**
@@ -17,6 +15,9 @@ public class OpenClient {
     @SuppressWarnings("JavadocLinkAsPlainText")
     private String targetEndpoint;
 
+    public void setTargetEndpoint(String targetEndpoint) {
+        this.targetEndpoint = targetEndpoint;
+    }
 
     /**
      * 获取token
