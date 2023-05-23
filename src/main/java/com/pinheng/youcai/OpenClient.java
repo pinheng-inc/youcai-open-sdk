@@ -20,6 +20,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -83,12 +84,64 @@ public class OpenClient {
         return submitUrlEncoded("distribution/auth/open/oauth2/accessToken", map, data -> {
             val reader = DataResponseHandler.objectMapper.readerFor(GrantAccessToken.class);
             return reader.readValue(data);
-        });
+        }, null);
     }
 
-    private <T> T submitUrlEncoded(String uri, Map<String, String> data, OpenLogic<T> logic) throws IOException {
+    /**
+     * 刷新token
+     *
+     * @param key          应用key
+     * @param refreshToken {@link GrantAccessToken#getRefreshToken()}
+     * @return 执行结果
+     * @throws OpenException 协议异常
+     * @throws IOException   读写异常
+     */
+    public GrantAccessToken refreshAccessToken(String key, String refreshToken) throws OpenException, IOException {
+        val map = new HashMap<String, String>();
+        map.put("grant_type", "refresh_token");
+        map.put("app_key", key);
+        map.put("refresh_token", refreshToken);
+        map.put("timestamp", timestampFormatter.format(LocalDateTime.now()));
+        return submitUrlEncoded("distribution/auth/open/oauth2/accessToken", map, data -> {
+            val reader = DataResponseHandler.objectMapper.readerFor(GrantAccessToken.class);
+            return reader.readValue(data);
+        }, null);
+    }
+
+    /**
+     * 执行对应api并且返回业务结果
+     *
+     * @param key        应用key
+     * @param secret     应用secret
+     * @param token      {@link GrantAccessToken#getAccessToken()}
+     * @param method     业务方法，详见：<a href="https://b2b.you.163.com/distribution/openapi#/home">API说明</a>
+     * @param v          api版本，详见：<a href="https://b2b.you.163.com/distribution/openapi#/home">API说明</a>
+     * @param parameters 业务参数，详见：<a href="https://b2b.you.163.com/distribution/openapi#/home">API说明</a>
+     * @return 业务结果
+     * @throws OpenException 协议异常
+     * @throws IOException   读写异常
+     */
+    public Object executeApi(String key, String secret, String token, String method, String v, Object parameters) throws OpenException, IOException {
+        val map = new HashMap<String, String>();
+        map.put("method", method);
+        map.put("app_key", key);
+        map.put("v", v);
+        map.put("timestamp", timestampFormatter.format(LocalDateTime.now()));
+        map.put("param_json", DataResponseHandler.objectMapper.writeValueAsString(parameters));
+        val sign = SignUtils.sign(map, secret);
+        map.put("sign", sign);
+
+        return submitUrlEncoded("distribution/open/api/entry", map, it -> it, it -> it.addHeader("Authorization", "Bearer " + token));
+    }
+
+
+    private <T> T submitUrlEncoded(String uri, Map<String, String> data, OpenLogic<T> logic
+            , Consumer<HttpPost> beforeEntity) throws IOException {
         try (val client = createHttpClient()) {
             val method = new HttpPost(targetEndpoint + uri);
+            if (beforeEntity != null) {
+                beforeEntity.accept(method);
+            }
             val entity = EntityBuilder.create()
                     .setContentType(ContentType.APPLICATION_FORM_URLENCODED)
                     .setParameters(
@@ -103,34 +156,5 @@ public class OpenClient {
             return logic.executeLogic(response);
         }
 
-    }
-
-    /**
-     * 刷新token
-     *
-     * @param key          应用key
-     * @param refreshToken {@link GrantAccessToken#getRefreshToken()}
-     * @return 执行结果
-     * @throws OpenException 协议异常
-     * @throws IOException   读写异常
-     */
-    public GrantAccessToken refreshAccessToken(String key, String refreshToken) throws OpenException, IOException {
-        throw new NoSuchMethodError("");
-    }
-
-    /**
-     * 执行对应api并且返回业务结果
-     *
-     * @param key        应用key
-     * @param token      {@link GrantAccessToken#getAccessToken()}
-     * @param method     业务方法，详见：<a href="https://b2b.you.163.com/distribution/openapi#/home">API说明</a>
-     * @param v          api版本，详见：<a href="https://b2b.you.163.com/distribution/openapi#/home">API说明</a>
-     * @param parameters 业务参数，详见：<a href="https://b2b.you.163.com/distribution/openapi#/home">API说明</a>
-     * @return 业务结果
-     * @throws OpenException 协议异常
-     * @throws IOException   读写异常
-     */
-    public Object executeApi(String key, String token, String method, String v, Object parameters) throws OpenException, IOException {
-        throw new NoSuchMethodError("");
     }
 }

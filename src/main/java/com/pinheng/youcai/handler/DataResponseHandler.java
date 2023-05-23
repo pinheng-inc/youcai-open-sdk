@@ -40,6 +40,10 @@ public class DataResponseHandler implements ResponseHandler<JsonNode> {
                 if (message == null || !message.isTextual())
                     throw new OpenException(1, "response bad data(without message)");
 
+                if (code.intValue() != 2000) {
+                    throw new OpenException(code.intValue(), message.textValue());
+                }
+
                 return root.get("data");
 
             } catch (IOException ex) {

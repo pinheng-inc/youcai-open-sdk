@@ -30,6 +30,30 @@ class OpenClientTest {
                     assertThat(it.getRefreshTokenExpires())
                             .isGreaterThan(0);
                 });
+
+        val token2 = client.refreshAccessToken("9u5fwqu6", token.getRefreshToken());
+        assertThat(token2)
+                .as("通过测试环境肯定可以成功刷新token")
+                .satisfies(it -> {
+                    assertThat(it.getAccessToken())
+                            .isNotNull();
+                    assertThat(it.getRefreshToken())
+                            .isNotNull();
+                    assertThat(it.getExpiresIn())
+                            .isGreaterThan(0);
+                    assertThat(it.getRefreshTokenExpires())
+                            .isGreaterThan(0);
+                });
+
+        val listAllSpuResult
+                = client.executeApi("9u5fwqu6", "", token2.getAccessToken()
+                , "yanxuan.product.listAllSpu", "1.0.0", null);
+
+        assertThat(listAllSpuResult)
+                .as("切不管这个测试用户是否拥有商品，但是必须得返回")
+                .isNotNull()
+                .satisfies(it -> log.info(it.toString()));
+
     }
 
 }
