@@ -1,19 +1,21 @@
 package com.pinheng.youcai;
 
-public class OpenException extends Exception{
-    public OpenException() {
-        super();
-    }
+public class OpenException extends RuntimeException {
 
-    public OpenException(String message) {
+    private final int code;
+
+    public OpenException(int code, String message) {
         super(message);
+        this.code = code;
     }
 
-    public OpenException(String message, Throwable cause) {
+    public OpenException(int code, String message, Throwable cause) {
         super(message, cause);
+        this.code = code;
     }
 
-    public OpenException(Throwable cause) {
-        super(cause);
+    @SuppressWarnings("unused")
+    public int getCode() {
+        return code;
     }
 }

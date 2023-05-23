@@ -1,15 +1,21 @@
 package com.pinheng.youcai.model;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Objects;
 
 public class GrantAccessToken {
+    @JsonProperty("access_token")
     private String accessToken;
+    @JsonProperty("refresh_token")
     private String refreshToken;
     /**
      * 单位秒
      */
+    @JsonProperty("expires_in")
     private int expiresIn;
+    @JsonProperty("refresh_token_expires")
     private long refreshTokenExpires;
 
     @Override
