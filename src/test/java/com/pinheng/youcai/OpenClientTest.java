@@ -46,7 +46,7 @@ class OpenClientTest {
                 });
 
         val listAllSpuResult
-                = client.executeApi("9u5fwqu6", "", token2.getAccessToken()
+                = client.executeApi("9u5fwqu6", "a28a53e7f2deb3cb9a038d95d1600827", token2.getAccessToken()
                 , "yanxuan.product.listAllSpu", "1.0.0", null);
 
         assertThat(listAllSpuResult)
