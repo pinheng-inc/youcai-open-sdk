@@ -68,7 +68,7 @@ public class OpenClient {
     }
 
     private static ZonedDateTime timestampForChina() {
-        return ZonedDateTime.now(ZoneId.of("CTT"));
+        return ZonedDateTime.now(ZoneId.of(ZoneId.SHORT_IDS.get("CTT")));
     }
 
     /**
