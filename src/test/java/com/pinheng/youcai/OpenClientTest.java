@@ -72,6 +72,10 @@ class OpenClientTest {
         System.out.println(list);
         System.out.println(client.executeApi(key, secret, token2.getAccessToken()
                 , "yanxuan.product.details", "1.0.0", list));
+        System.out.println(client.executeApi(key, secret, token2.getAccessToken()
+                , "yanxuan.product.price", "1.0.0", list));
+        System.out.println(client.executeApi(key, secret, token2.getAccessToken()
+                , "yanxuan.product.stock", "1.0.0", list));
 
 
     }

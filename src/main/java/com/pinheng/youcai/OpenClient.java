@@ -15,7 +15,8 @@ import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
@@ -80,7 +81,7 @@ public class OpenClient {
         map.put("grant_type", "access_token");
         map.put("app_key", key);
         map.put("app_secret", secret);
-        map.put("timestamp", timestampFormatter.format(LocalDateTime.now()));
+        map.put("timestamp", timestampFormatter.format(ZonedDateTime.now(ZoneId.of("+8"))));
         return submitUrlEncoded("distribution/auth/open/oauth2/accessToken", map, data -> {
             val reader = DataResponseHandler.objectMapper.readerFor(GrantAccessToken.class);
             return reader.readValue(data);
@@ -101,7 +102,7 @@ public class OpenClient {
         map.put("grant_type", "refresh_token");
         map.put("app_key", key);
         map.put("refresh_token", refreshToken);
-        map.put("timestamp", timestampFormatter.format(LocalDateTime.now()));
+        map.put("timestamp", timestampFormatter.format(ZonedDateTime.now(ZoneId.of("+8"))));
         return submitUrlEncoded("distribution/auth/open/oauth2/accessToken", map, data -> {
             val reader = DataResponseHandler.objectMapper.readerFor(GrantAccessToken.class);
             return reader.readValue(data);
@@ -126,7 +127,7 @@ public class OpenClient {
         map.put("method", method);
         map.put("app_key", key);
         map.put("v", v);
-        map.put("timestamp", timestampFormatter.format(LocalDateTime.now()));
+        map.put("timestamp", timestampFormatter.format(ZonedDateTime.now(ZoneId.of("+8"))));
         map.put("param_json", DataResponseHandler.objectMapper.writeValueAsString(parameters));
         val sign = SignUtils.sign(map, secret);
         map.put("sign", sign);
