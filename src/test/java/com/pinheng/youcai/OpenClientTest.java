@@ -68,14 +68,30 @@ class OpenClientTest {
                 StreamSupport.stream(((ArrayNode) listAllResult)
                                 .spliterator(), true)
                         .map(JsonNode::textValue)
+                        .limit(10)
                         .collect(Collectors.joining(","));
         System.out.println(list);
+//        System.out.println(client.executeApi(key, secret, token2.getAccessToken()
+//                , "yanxuan.product.details", "1.0.0", "100004048001"));
         System.out.println(client.executeApi(key, secret, token2.getAccessToken()
                 , "yanxuan.product.details", "1.0.0", list));
         System.out.println(client.executeApi(key, secret, token2.getAccessToken()
                 , "yanxuan.product.price", "1.0.0", list));
+
         System.out.println(client.executeApi(key, secret, token2.getAccessToken()
-                , "yanxuan.product.stock", "1.0.0", list));
+                , "yanxuan.product.stock", "1.0.0", "100004163001,100004165001,200006518004"));
+
+
+        val listAllSpu = client.executeApi(key, secret, token2.getAccessToken()
+                , "yanxuan.product.listAllSpu", "1.0.0", null);
+        val listAllSpuString =
+                StreamSupport.stream(((ArrayNode) listAllSpu)
+                                .spliterator(), true)
+                        .map(JsonNode::textValue)
+                        .limit(10)
+                        .collect(Collectors.joining(","));
+        System.out.println(client.executeApi(key, secret, token2.getAccessToken()
+                , "yanxuan.product.priceSpu", "1.0.0", listAllSpuString));
 
 
     }
