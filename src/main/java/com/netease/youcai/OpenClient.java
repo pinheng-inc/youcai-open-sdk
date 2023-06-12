@@ -1,8 +1,9 @@
-package com.pinheng.youcai;
+package com.netease.youcai;
 
-import com.pinheng.youcai.handler.DataResponseHandler;
-import com.pinheng.youcai.handler.OpenLogic;
-import com.pinheng.youcai.model.GrantAccessToken;
+import com.netease.youcai.handler.DataResponseHandler;
+import com.netease.youcai.handler.OpenLogic;
+import com.netease.youcai.model.GrantAccessToken;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.EntityBuilder;
@@ -27,6 +28,7 @@ import java.util.stream.Collectors;
 /**
  * <a href="https://b2b.you.163.com/distribution/openapi#/home">API说明</a>
  */
+@Slf4j
 public class OpenClient {
 
     /**
@@ -127,6 +129,7 @@ public class OpenClient {
      * @throws IOException   读写异常
      */
     public Object executeApi(String key, String secret, String token, String method, String v, Object parameters) throws OpenException, IOException {
+        log.debug("method:" + method + ",parameters:" + parameters);
         val map = new HashMap<String, String>();
         map.put("method", method);
         map.put("app_key", key);
@@ -142,7 +145,6 @@ public class OpenClient {
     private String generateTimestamp() {
         return timestampFormatter.format(timestampForChina());
     }
-
 
     private <T> T submitUrlEncoded(String uri, Map<String, String> data, OpenLogic<T> logic
             , Consumer<HttpPost> beforeEntity) throws IOException {

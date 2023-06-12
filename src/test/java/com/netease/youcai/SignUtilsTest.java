@@ -1,4 +1,4 @@
-package com.pinheng.youcai;
+package com.netease.youcai;
 
 import lombok.val;
 import org.junit.jupiter.api.Test;

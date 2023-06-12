@@ -1,10 +1,11 @@
-package com.pinheng.youcai.model;
+package com.netease.youcai.model;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Objects;
 
+@SuppressWarnings("unused")
 public class GrantAccessToken {
     @JsonProperty("access_token")
     private String accessToken;

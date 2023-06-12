@@ -1,9 +1,10 @@
-package com.pinheng.youcai;
+package com.netease.youcai;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -24,7 +25,7 @@ class OpenClientTest {
         String key = "9u5fwqu6";
         String secret = "a28a53e7f2deb3cb9a038d95d1600827";
         val token = client.grantAccessToken(key, secret);
-        assertThat(token)
+        Assertions.assertThat(token)
                 .as("通过测试环境肯定可以成功获取token")
                 .satisfies(it -> {
                     assertThat(it.getAccessToken())
@@ -38,7 +39,7 @@ class OpenClientTest {
                 });
 
         val token2 = client.refreshAccessToken(key, token.getRefreshToken());
-        assertThat(token2)
+        Assertions.assertThat(token2)
                 .as("通过测试环境肯定可以成功刷新token")
                 .satisfies(it -> {
                     assertThat(it.getAccessToken())

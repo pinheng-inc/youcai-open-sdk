@@ -1,8 +1,8 @@
-package com.pinheng.youcai.handler;
+package com.netease.youcai.handler;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pinheng.youcai.OpenException;
+import com.netease.youcai.OpenException;
 import lombok.val;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ResponseHandler;

@@ -1,15 +1,12 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Main
+name: Release
 
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "main" ]
-  #    tags: [ "*" ]
-  #  pull_request:
-  #    branches: [ "*" ]
+    tags: [ "v*" ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -35,9 +32,13 @@ jobs:
           distribution: corretto
           cache: maven
       - run: java -version
+      - uses: olegtarasov/get-tag@v2.1.2
+        id: tagName
+        with:
+          tagRegex: "v(?<version>.*)"
       - name: Build
         env:
-          phReleaseVersion: 1.0.0-SNAPSHOT
+          phReleaseVersion: ${{ steps.tagName.outputs.version }}
           phUsername: ${{ secrets.MAVEN_PH_USERNAME }}
           phPassword: ${{ secrets.MAVEN_PH_PASSWORD }}
         run: |

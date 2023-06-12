@@ -1,4 +1,4 @@
-package com.pinheng.youcai;
+package com.netease.youcai;
 
 public class OpenException extends RuntimeException {
 

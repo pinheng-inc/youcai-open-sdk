@@ -7,7 +7,7 @@
     </appender>
 
     <logger name="org.apache.http" level="info"/>
-    <logger name="com.pinheng" level="DEBUG"/>
+    <logger name="com.netease" level="DEBUG"/>
 
     <root level="info">
         <appender-ref ref="CONSOLE"/>

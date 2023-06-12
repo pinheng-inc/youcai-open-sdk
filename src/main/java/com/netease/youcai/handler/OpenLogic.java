@@ -1,7 +1,7 @@
-package com.pinheng.youcai.handler;
+package com.netease.youcai.handler;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.pinheng.youcai.OpenException;
+import com.netease.youcai.OpenException;
 
 import java.io.IOException;
 

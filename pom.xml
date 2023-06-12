@@ -7,7 +7,7 @@
     <groupId>com.pinheng.youcai</groupId>
     <artifactId>youcai-open-sdk</artifactId>
     <!--    版本号是无需切换的，main分支次次发布 snapshot, v开头的tag 则会直接发布release-->
-    <version>1.0.0-SNAPSHOT</version>
+    <version>${phReleaseVersion}</version>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -110,6 +110,7 @@
             <version>3.22.0</version>
             <scope>test</scope>
         </dependency>
+        <!--suppress VulnerableLibrariesLocal -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
@@ -122,7 +123,10 @@
             <id>pinheng-release</id>
             <url>http://nexus.weitun.com.cn/repository/maven-snapshots/</url>
         </snapshotRepository>
+        <repository>
+            <id>pinheng-release</id>
+            <url>http://nexus.weitun.com.cn/repository/maven-releases/</url>
+        </repository>
     </distributionManagement>
-
 
 </project>
