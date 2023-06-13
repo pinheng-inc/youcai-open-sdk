@@ -16,6 +16,7 @@ import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.nio.charset.StandardCharsets;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -154,7 +155,7 @@ public class OpenClient {
                 beforeEntity.accept(method);
             }
             val entity = EntityBuilder.create()
-                    .setContentType(ContentType.APPLICATION_FORM_URLENCODED)
+                    .setContentType(ContentType.APPLICATION_FORM_URLENCODED.withCharset(StandardCharsets.UTF_8))
                     .setParameters(
                             data.entrySet().stream()
                                     .map(it -> new BasicNameValuePair(it.getKey(), it.getValue()))
