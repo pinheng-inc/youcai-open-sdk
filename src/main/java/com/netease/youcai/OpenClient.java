@@ -3,6 +3,7 @@ package com.netease.youcai;
 import com.netease.youcai.handler.DataResponseHandler;
 import com.netease.youcai.handler.OpenLogic;
 import com.netease.youcai.model.GrantAccessToken;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.http.client.config.RequestConfig;
@@ -37,6 +38,16 @@ public class OpenClient {
      */
     @SuppressWarnings("JavadocLinkAsPlainText")
     private String targetEndpoint;
+    /**
+     * 应用key
+     */
+    @Setter
+    private String key;
+    /**
+     * 应用secret
+     */
+    @Setter
+    private String secret;
 
     private final DateTimeFormatter timestampFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -77,13 +88,11 @@ public class OpenClient {
     /**
      * 获取token
      *
-     * @param key    应用key
-     * @param secret 应用secret
      * @return 执行结果
      * @throws OpenException 协议异常
      * @throws IOException   读写异常
      */
-    public GrantAccessToken grantAccessToken(String key, String secret) throws OpenException, IOException {
+    public GrantAccessToken grantAccessToken() throws OpenException, IOException {
         val map = new HashMap<String, String>();
         map.put("grant_type", "access_token");
         map.put("app_key", key);
@@ -98,13 +107,12 @@ public class OpenClient {
     /**
      * 刷新token
      *
-     * @param key          应用key
      * @param refreshToken {@link GrantAccessToken#getRefreshToken()}
      * @return 执行结果
      * @throws OpenException 协议异常
      * @throws IOException   读写异常
      */
-    public GrantAccessToken refreshAccessToken(String key, String refreshToken) throws OpenException, IOException {
+    public GrantAccessToken refreshAccessToken(String refreshToken) throws OpenException, IOException {
         val map = new HashMap<String, String>();
         map.put("grant_type", "refresh_token");
         map.put("app_key", key);
@@ -119,8 +127,6 @@ public class OpenClient {
     /**
      * 执行对应api并且返回业务结果
      *
-     * @param key        应用key
-     * @param secret     应用secret
      * @param token      {@link GrantAccessToken#getAccessToken()}
      * @param method     业务方法，详见：<a href="https://b2b.you.163.com/distribution/openapi#/home">API说明</a>
      * @param v          api版本，详见：<a href="https://b2b.you.163.com/distribution/openapi#/home">API说明</a>
@@ -129,7 +135,7 @@ public class OpenClient {
      * @throws OpenException 协议异常
      * @throws IOException   读写异常
      */
-    public Object executeApi(String key, String secret, String token, String method, String v, Object parameters) throws OpenException, IOException {
+    public Object executeApi(String token, String method, String v, Object parameters) throws OpenException, IOException {
         log.debug("method:" + method + ",parameters:" + parameters);
         val map = new HashMap<String, String>();
         map.put("method", method);

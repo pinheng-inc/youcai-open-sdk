@@ -22,9 +22,9 @@ class OpenClientTest {
     void dummy() throws OpenException, IOException {
         OpenClient client = new OpenClient();
         client.setTargetEndpoint("http://b2b.test.you.163.com/");
-        String key = "9u5fwqu6";
-        String secret = "a28a53e7f2deb3cb9a038d95d1600827";
-        val token = client.grantAccessToken(key, secret);
+        client.setKey("9u5fwqu6");
+        client.setSecret("a28a53e7f2deb3cb9a038d95d1600827");
+        val token = client.grantAccessToken();
         Assertions.assertThat(token)
                 .as("通过测试环境肯定可以成功获取token")
                 .satisfies(it -> {
@@ -38,7 +38,7 @@ class OpenClientTest {
                             .isGreaterThan(0);
                 });
 
-        val token2 = client.refreshAccessToken(key, token.getRefreshToken());
+        val token2 = client.refreshAccessToken(token.getRefreshToken());
         Assertions.assertThat(token2)
                 .as("通过测试环境肯定可以成功刷新token")
                 .satisfies(it -> {
@@ -53,7 +53,7 @@ class OpenClientTest {
                 });
 
         val listAllSpuResult
-                = client.executeApi(key, secret, token2.getAccessToken()
+                = client.executeApi(token2.getAccessToken()
                 , "yanxuan.product.listAllSpu", "1.0.0", null);
 
         assertThat(listAllSpuResult)
@@ -62,7 +62,7 @@ class OpenClientTest {
                 .satisfies(it -> log.info(it.toString()));
 
         val listAllResult
-                = client.executeApi(key, secret, token2.getAccessToken()
+                = client.executeApi(token2.getAccessToken()
                 , "yanxuan.product.listAll", "1.0.0", null);
         System.out.println(listAllResult);
         val list =
@@ -74,16 +74,16 @@ class OpenClientTest {
         System.out.println(list);
 //        System.out.println(client.executeApi(key, secret, token2.getAccessToken()
 //                , "yanxuan.product.details", "1.0.0", "100004048001"));
-        System.out.println(client.executeApi(key, secret, token2.getAccessToken()
+        System.out.println(client.executeApi(token2.getAccessToken()
                 , "yanxuan.product.details", "1.0.0", list));
-        System.out.println(client.executeApi(key, secret, token2.getAccessToken()
+        System.out.println(client.executeApi(token2.getAccessToken()
                 , "yanxuan.product.price", "1.0.0", list));
 
-        System.out.println(client.executeApi(key, secret, token2.getAccessToken()
+        System.out.println(client.executeApi(token2.getAccessToken()
                 , "yanxuan.product.stock", "1.0.0", "100004163001,100004165001,200006518004"));
 
 
-        val listAllSpu = client.executeApi(key, secret, token2.getAccessToken()
+        val listAllSpu = client.executeApi(token2.getAccessToken()
                 , "yanxuan.product.listAllSpu", "1.0.0", null);
         val listAllSpuString =
                 StreamSupport.stream(((ArrayNode) listAllSpu)
@@ -91,7 +91,7 @@ class OpenClientTest {
                         .map(JsonNode::textValue)
                         .limit(10)
                         .collect(Collectors.joining(","));
-        System.out.println(client.executeApi(key, secret, token2.getAccessToken()
+        System.out.println(client.executeApi(token2.getAccessToken()
                 , "yanxuan.product.priceSpu", "1.0.0", listAllSpuString));
 
 
