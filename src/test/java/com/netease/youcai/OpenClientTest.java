@@ -2,6 +2,7 @@ package com.netease.youcai;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.netease.youcai.handler.DataResponseHandler;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.assertj.core.api.Assertions;
@@ -95,6 +96,12 @@ class OpenClientTest {
                 , "yanxuan.product.priceSpu", "1.0.0", listAllSpuString));
 
 
+//        val skuCode = ((ArrayNode) listAllResult).get(0).textValue();
+        val skuCode = "100004163001";
+        String json = "{\"thirdInfo\":{\"thirdPurchaserAccount\":\"测试新分行采购\",\"thirdPurchaserPhone\":\"13419624938\",\"thirdPurchaserName\":\"周佳威\"},\"consigneeInfo\":{\"consigneeEmail\":\"\",\"consigneeName\":\"单元测试\",\"consigneeProvince\":\"湖北\",\"consigneeCounty\":\"江岸区\",\"consigneeMobile\":\"13419624938\",\"consigneeZip\":\"\",\"consigneeTown\":\"\",\"consigneeAddress\":\"湖北武汉市江岸区后湖街道融创智谷C2 -2  17\",\"consigneeCity\":\"武汉市\"},\"skuInfoList\":[{\"skuUnitPrice\":\"200.0\",\"skuCode\":\"" + skuCode + "\",\"skuNum\":2}],\"thirdOrderId\":\"" + System.currentTimeMillis() + "\",\"paymentInfo\":{\"payMoney\":\"700.0\",\"paymentType\":\"1\"},\"submitStateType\":0}";
+        JsonNode jsonNode = DataResponseHandler.objectMapper.readTree(json);
+        val order = client.executeApi(token2.getAccessToken(), "yanxuan.order.paid.create", "1.0.0", jsonNode);
+        System.out.println(order);
     }
 
 }

@@ -6,12 +6,13 @@ import com.netease.youcai.OpenException;
 import lombok.val;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ResponseHandler;
-import org.apache.http.entity.ContentType;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
-import java.util.Objects;
 
+/**
+ * 结果值有可能是{@link JsonNode}也有可能是{@link String}
+ */
 public class DataResponseHandler implements ResponseHandler<JsonNode> {
 
     public static final ObjectMapper objectMapper = new ObjectMapper();
@@ -24,11 +25,9 @@ public class DataResponseHandler implements ResponseHandler<JsonNode> {
         if (!response.containsHeader("Content-Type")) {
             throw new OpenException(0, "server did not response Content-Type");
         }
-        val ct = response.getFirstHeader("Content-Type").getValue();
-        if (!Objects.equals(ContentType.APPLICATION_JSON.getMimeType(), ContentType.parse(ct).getMimeType())) {
-            throw new OpenException(0, "server responded Content-Type:" + ct);
-        }
-
+//        val ct = response.getFirstHeader("Content-Type").getValue();
+//        实际上我们没遇到了 text/plain;charset=ISO-8859-1
+//        而且内容是 code.. data ok:true
         byte[] data = EntityUtils.toByteArray(response.getEntity());
         try {
             try {
@@ -36,12 +35,12 @@ public class DataResponseHandler implements ResponseHandler<JsonNode> {
                 val code = root.get("code");
                 if (code == null || !code.isNumber())
                     throw new OpenException(1, "response bad data(without code)");
-                val message = root.get("message");
-                if (message == null || !message.isTextual())
-                    throw new OpenException(1, "response bad data(without message)");
 
                 if (code.intValue() != 2000) {
-                    throw new OpenException(code.intValue(), message.textValue());
+                    val message = root.get("message");
+                    throw new OpenException(code.intValue()
+                            , (message != null && message.isTextual()) ? message.textValue()
+                            : "response without message.");
                 }
 
                 return root.get("data");
