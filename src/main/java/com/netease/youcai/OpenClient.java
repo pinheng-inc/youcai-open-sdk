@@ -1,5 +1,6 @@
 package com.netease.youcai;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.netease.youcai.handler.DataResponseHandler;
 import com.netease.youcai.handler.OpenLogic;
 import com.netease.youcai.model.GrantAccessToken;
@@ -135,7 +136,7 @@ public class OpenClient {
      * @throws OpenException 协议异常
      * @throws IOException   读写异常
      */
-    public Object executeApi(String token, String method, String v, Object parameters) throws OpenException, IOException {
+    public JsonNode executeApi(String token, String method, String v, Object parameters) throws OpenException, IOException {
         log.debug("method:" + method + ",parameters:" + parameters);
         val map = new HashMap<String, String>();
         map.put("method", method);
